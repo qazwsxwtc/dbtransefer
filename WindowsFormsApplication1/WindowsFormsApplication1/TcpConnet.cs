@@ -212,7 +212,57 @@ namespace WindowsFormsApplication1
 
                 string sdata = new string(szchar);
 
-                OnRecvData(sdata);
+
+               if (sdata.Length >= 12 && sdata[0] == 'W' && sdata[1] == 'J')
+                {
+                    uint iClientNo;
+                    uint iBodylen = 0;
+                    int iFuncNo;
+                    if (JsonOp.UnPacketHead(sdata, out iFuncNo, out iClientNo, out iBodylen))
+                    {
+                        if (iBodylen + 12 > sdata.Length)
+                        {
+                            RecvDataStruct oRecvDataStruct = new RecvDataStruct();
+                            oRecvDataStruct.ifd = 0;
+                            oRecvDataStruct.itotallen = iBodylen + 12;
+                            oRecvDataStruct.iRemainlen = iBodylen + 12;
+                            lock(DataMgr.Get_DataMgr().m_RecvLst)
+                            {
+                                DataMgr.Get_DataMgr().m_RecvLst.Add(oRecvDataStruct);
+                            }
+                        }
+                    }
+                }
+
+               bool bRecOK = true;
+               lock (DataMgr.Get_DataMgr().m_RecvLst)
+               {
+                   if(DataMgr.Get_DataMgr().m_RecvLst.Count > 0)
+                   {
+                       
+                      List<RecvDataStruct> lst = DataMgr.Get_DataMgr().Get();
+                      RecvDataStruct oRecvDataStruct = lst[0];
+                       oRecvDataStruct.iRemainlen -= (uint)sdata.Length;
+                       oRecvDataStruct.strrecvData += sdata;
+
+                       if(oRecvDataStruct.iRemainlen <= 0)
+                       {
+                           sdata = oRecvDataStruct.strrecvData;
+                           DataMgr.Get_DataMgr().Remove();
+                       }
+                       else
+                       {
+                           DataMgr.Get_DataMgr().Set(oRecvDataStruct);
+                           bRecOK = false;
+                       }
+                   }
+               }
+
+               if (bRecOK)
+               {
+                     OnRecvData(sdata);
+               }
+               
                 mas.BeginRead(state.buffer, 0, StateObject.BufferSize,
                         new AsyncCallback(TCPReadCallBack), state);
             }
@@ -238,9 +288,10 @@ namespace WindowsFormsApplication1
            }
             else if (sdata.Length >= 12 && sdata[0] == 'W' && sdata[1] == 'J')
             {
-                int iClientNo;
+                uint iClientNo;
+                uint iBodylen = 0;
                 int iFuncNo;
-                if(JsonOp.UnPacketHead(sdata, out iFuncNo, out iClientNo))
+                if (JsonOp.UnPacketHead(sdata, out iFuncNo, out iClientNo, out iBodylen))
                 {
                     switch(iFuncNo)
                     {

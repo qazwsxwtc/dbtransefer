@@ -24,10 +24,7 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
 
-            int iPort = 15555;
-            string ipAddr = "127.0.0.1";
-            TcpConnet.Get_TcpConnet().ConnectToServer(iPort, ipAddr);
-            TcpConnet.Get_TcpConnet().addForm(this);
+           
             //Thread t1 = new Thread(new ThreadStart(TestMethod));
             //t1.Start();
             //TcpConnet pff = new TcpConnet();
@@ -53,9 +50,9 @@ namespace WindowsFormsApplication1
 
         private void ConnectDb_Click(object sender, EventArgs e)
         {
-            string dbname = "SQLdd";
-            string username = "qaz";
-            string pwd = "123";
+            string dbname = "sql2012";
+            string username = "geomos_admin2";
+            string pwd = "geomos_admin_2006";
             string strBody;
             string strPacket;
             JsonOp.PacketConnectString(username, pwd, dbname, 1, out strBody);
@@ -66,7 +63,7 @@ namespace WindowsFormsApplication1
 
         private void ReadDb_Click(object sender, EventArgs e)
         {
-            string strSql = "SELECT * FROM Table_1";
+            string strSql = "SELECT [ID], [Name] FROM  Points";
             int iCol = 2;
             //cols.Add("1");
             //cols.Add("2");
@@ -145,6 +142,14 @@ namespace WindowsFormsApplication1
                 }
                 Thread.Sleep(3000);//每3秒钟检测一次内存缓冲区
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int iPort = 15555;
+            string ipAddr = "47.99.149.104";
+            TcpConnet.Get_TcpConnet().ConnectToServer(iPort, ipAddr);
+            TcpConnet.Get_TcpConnet().addForm(this);
         }
 
     }

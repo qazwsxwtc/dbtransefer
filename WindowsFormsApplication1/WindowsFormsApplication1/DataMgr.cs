@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApplication1
 {
+
+    public
+    struct RecvDataStruct
+    {
+        public int ifd ;
+        public uint itotallen ;
+        public uint iRemainlen;
+        public string strrecvData;
+    }
+
+
     public
     struct CData
     {
@@ -53,8 +64,30 @@ namespace WindowsFormsApplication1
             }
         }
 
+
+        public List<RecvDataStruct> Get()
+        {
+            return m_RecvLst;
+        }
+
+        public void Set(RecvDataStruct oo)
+        {
+            m_RecvLst.Clear();
+            m_RecvLst.Add(oo);
+        }
+
+        internal void Remove()
+        {
+            m_RecvLst.Clear();
+        }
+
         private List<CData> m_lst = new List<CData>();
 
         private static DataMgr m_DataMgr = null;
+
+
+        public List< RecvDataStruct> m_RecvLst = new List<RecvDataStruct>();
+
+      
     }
 }

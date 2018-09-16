@@ -47,23 +47,29 @@ namespace WindowsFormsApplication1
 
 
         public
-        static bool UnPacketHead(string StrRecv, out int iFuncNo, out int iClientNo)
+        static bool UnPacketHead(string StrRecv, out int iFuncNo, out uint iClientNo, out uint iLEN)
         {
             if (StrRecv.Length >= iHead && StrRecv[0] == 'W' && StrRecv[1] == 'J')
             {
-                int i32No = StrRecv[2] << 24;
-                 int i24No = StrRecv[3] << 16;
-                int i16NO = StrRecv[4] << 8;
-                int i8NO= StrRecv[5];
+                uint i32No = (uint) StrRecv[2] << 24;
+                uint  i24No = (uint) (StrRecv[3] << 16);
+                uint  i16NO = (uint) (StrRecv[4] << 8);
+                uint i8NO = (uint)StrRecv[5];
                 iClientNo = i32No + i24No + i16NO + i8NO ;
 
                 iFuncNo = StrRecv[7];
 
-              
+
+                uint i32LEN = (uint)StrRecv[8] << 24;
+                uint i24LEN = (uint)StrRecv[9] << 16;
+                uint i16LEN = (uint)StrRecv[10] << 8;
+                uint i8LEN = (uint)StrRecv[11];
+                iLEN = i32LEN + i24LEN + i16LEN + i8LEN;
                 return true;
             }
             iFuncNo = -1;
-            iClientNo = -1;
+            iClientNo = 0;
+            iLEN = 0;
             return false;
         }
 
@@ -86,6 +92,7 @@ namespace WindowsFormsApplication1
             }
             catch(Exception dd)
             {
+                CWriteLog.WriteLogToFlie("adderror");
                 jsonText = "";
             }
 

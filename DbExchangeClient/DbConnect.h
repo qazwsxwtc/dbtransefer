@@ -47,6 +47,6 @@ public:
 private:
 	SQLHENV henv;  //环境句柄
 	SQLHDBC hdbc;  //数据库连接句柄
-	SQLHSTMT hstmt; //SQL语句句柄
+
 };
 

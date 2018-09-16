@@ -94,6 +94,7 @@ bool CRecvMsgRun::RunCDExcSelectCmd(const std::shared_ptr<PacketHead>& packHeadP
 		CDataMgr::GetCDataMgr()->GetShowClientInfo(packHeadPtr->iClientNo, pSocketConnectInfo);
 		if (nullptr != pSocketConnectInfo)
 		{
+			printf("RunCDExcSelectCmd ok =%d,\n ", str.length());
 			ClibeventService::SendMsg(pSocketConnectInfo->pbufev, str, str.length());
 			return true;
 		}

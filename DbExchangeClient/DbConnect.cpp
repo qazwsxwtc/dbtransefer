@@ -90,6 +90,7 @@ int CDbConnect::DisConnect()
 int CDbConnect::ExecDirect(SQLCHAR* strSQL, int iColNum, std::list<std::list<std::string> > &lst2data, std::string &errorstr)
 {
 	SQLRETURN retcode;
+	SQLHSTMT hstmt; //SQLÓï¾ä¾ä±ú
 	retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
 	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
 	{
